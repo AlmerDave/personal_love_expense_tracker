@@ -2,7 +2,7 @@ class AppConfig {
   AppConfig._();
 
   // App Information
-  static const String appName = 'PesoPal';
+  static const String appName = 'HerPeso';
   static const String appVersion = '1.0.0';
   static const String appTagline = 'Your friendly peso tracker';
 
@@ -17,12 +17,12 @@ class AppConfig {
 
   // Goal Suggestions (in PHP)
   static const List<double> goalSuggestions = [
+    1000,
+    2000,
+    5000,
+    7000,
     10000,
-    15000,
-    20000,
-    25000,
-    30000,
-    40000,
+    12000,
   ];
 
   // Animation Durations

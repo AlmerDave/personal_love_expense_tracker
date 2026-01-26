@@ -11,7 +11,6 @@ import '../../../core/utils/date_formatter.dart';
 import '../../../data/models/expense.dart';
 import '../../../providers/expense_provider.dart';
 import '../../../shared/widgets/custom_app_bar.dart';
-import '../../../shared/widgets/bottom_nav_bar.dart';
 import '../../../shared/widgets/empty_state_widget.dart';
 import '../../../shared/dialogs/confirm_delete_dialog.dart';
 import '../../../navigation/route_names.dart';
@@ -38,7 +37,7 @@ class _TransactionHistoryScreenState extends State<TransactionHistoryScreen> {
       backgroundColor: AppColors.bgPrimary,
       appBar: CustomAppBar(
         title: 'Transactions',
-        showBackButton: true,
+        showBackButton: false, // Changed to false since this is now a tab
         actions: [
           IconButton(
             icon: const Icon(Icons.search_rounded, color: AppColors.textPrimary),
@@ -68,38 +67,31 @@ class _TransactionHistoryScreenState extends State<TransactionHistoryScreen> {
           );
         },
       ),
-      bottomNavigationBar: BottomNavBar(
-        currentIndex: 1,
-        onTap: (index) {
-          if (index == 0) Navigator.pushReplacementNamed(context, RouteNames.dashboard);
-          if (index == 2) Navigator.pushReplacementNamed(context, RouteNames.goals);
-        },
-      ),
     );
   }
 
   Widget _buildEmptyState(bool hasNoExpensesAtAll) {
-  if (hasNoExpensesAtAll) {
-    return EmptyStateWidget(
-      emoji: '📝',
-      title: 'No expenses yet',
-      description: 'Start tracking your spending to see your history here',
-      buttonLabel: 'Add Expense',
-      onButtonPressed: () => Navigator.pushNamed(context, RouteNames.manualEntry),
-    );
-  } else {
-    return EmptyStateWidget(
-      emoji: '🔍', 
-      title: 'No $_selectedCategory expenses',
-      description: 'Try a different category or clear the filter',
-      buttonLabel: 'Show All',
-      onButtonPressed: () {
-        setState(() => _selectedCategory = null);
-        context.read<ExpenseProvider>().setCategoryFilter(null);
-      },
-    );
+    if (hasNoExpensesAtAll) {
+      return EmptyStateWidget(
+        emoji: '📝',
+        title: 'No expenses yet',
+        description: 'Start tracking your spending to see your history here',
+        buttonLabel: 'Add Expense',
+        onButtonPressed: () => Navigator.pushNamed(context, RouteNames.manualEntry),
+      );
+    } else {
+      return EmptyStateWidget(
+        emoji: '🔍', 
+        title: 'No $_selectedCategory expenses',
+        description: 'Try a different category or clear the filter',
+        buttonLabel: 'Show All',
+        onButtonPressed: () {
+          setState(() => _selectedCategory = null);
+          context.read<ExpenseProvider>().setCategoryFilter(null);
+        },
+      );
+    }
   }
-}
 
   Widget _buildExpensesList(Map<DateTime, List<Expense>> grouped, ExpenseProvider provider) {
     return ListView.builder(

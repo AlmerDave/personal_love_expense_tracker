@@ -7,7 +7,6 @@ import '../../../config/api_config.dart';
 import '../../../providers/dashboard_provider.dart';
 import '../../../providers/expense_provider.dart';
 import '../../../providers/goal_provider.dart';
-import '../../../shared/widgets/bottom_nav_bar.dart';
 import '../../../navigation/route_names.dart';
 import '../widgets/spending_overview_card.dart';
 import '../widgets/quick_insight_card.dart';
@@ -23,7 +22,6 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
-  int _currentNavIndex = 0;
   late ApiKeyService _apiKeyService;
   bool _isInitialized = false;
   bool _hasApiKey = false;
@@ -92,22 +90,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
     // Add setState to refresh the UI
     if (mounted) {
       setState(() {});
-    }
-  }
-
-  void _onNavTap(int index) {
-    if (index == _currentNavIndex) return;
-
-    switch (index) {
-      case 0:
-        // Already on dashboard
-        break;
-      case 1:
-        Navigator.pushNamed(context, RouteNames.transactions);
-        break;
-      case 2:
-        Navigator.pushNamed(context, RouteNames.goals);
-        break;
     }
   }
 
@@ -202,10 +184,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
             ),
           ),
         ),
-      ),
-      bottomNavigationBar: BottomNavBar(
-        currentIndex: _currentNavIndex,
-        onTap: _onNavTap,
       ),
     );
   }

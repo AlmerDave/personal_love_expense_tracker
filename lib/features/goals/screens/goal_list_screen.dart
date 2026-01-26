@@ -10,7 +10,6 @@ import '../../../data/models/goal.dart';
 import '../../../providers/goal_provider.dart';
 import '../../../providers/expense_provider.dart';
 import '../../../shared/widgets/custom_app_bar.dart';
-import '../../../shared/widgets/bottom_nav_bar.dart';
 import '../../../shared/widgets/empty_state_widget.dart';
 import '../../../shared/widgets/status_progress_bar.dart';
 import '../../../navigation/route_names.dart';
@@ -35,7 +34,7 @@ class _GoalListScreenState extends State<GoalListScreen> {
       backgroundColor: AppColors.bgPrimary,
       appBar: CustomAppBar(
         title: 'Goals',
-        showBackButton: true,
+        showBackButton: false, // Changed to false since this is now a tab
         actions: [
           IconButton(
             icon: const Icon(Icons.add_rounded, color: AppColors.primary),
@@ -79,13 +78,6 @@ class _GoalListScreenState extends State<GoalListScreen> {
               ],
             ),
           );
-        },
-      ),
-      bottomNavigationBar: BottomNavBar(
-        currentIndex: 2,
-        onTap: (index) {
-          if (index == 0) Navigator.pushReplacementNamed(context, RouteNames.dashboard);
-          if (index == 1) Navigator.pushReplacementNamed(context, RouteNames.transactions);
         },
       ),
     );

@@ -1,15 +1,13 @@
 import 'package:flutter/material.dart';
 import 'route_names.dart';
-import '../features/dashboard/screens/dashboard_screen.dart';
+import '../features/main/screens/main_screen.dart';
 import '../features/expense_entry/screens/manual_entry_screen.dart';
 import '../features/receipt_upload/screens/upload_screen.dart';
 import '../features/receipt_upload/screens/processing_screen.dart';
 import '../features/receipt_upload/screens/review_screen.dart';
 import '../features/ai_insights/screens/period_selection_screen.dart';
 import '../features/ai_insights/screens/insight_result_screen.dart';
-import '../features/goals/screens/goal_list_screen.dart';
 import '../features/goals/screens/set_goal_screen.dart';
-import '../features/transactions/screens/transaction_history_screen.dart';
 import '../features/transactions/screens/transaction_detail_screen.dart';
 
 class AppRouter {
@@ -17,15 +15,11 @@ class AppRouter {
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
-      // Main navigation
+      // Main navigation - now using MainScreen
       case RouteNames.dashboard:
-        return _buildRoute(const DashboardScreen(), settings);
-
       case RouteNames.transactions:
-        return _buildRoute(const TransactionHistoryScreen(), settings);
-
       case RouteNames.goals:
-        return _buildRoute(const GoalListScreen(), settings);
+        return _buildRoute(const MainScreen(), settings);
 
       // Expense entry
       case RouteNames.manualEntry:
@@ -79,7 +73,7 @@ class AppRouter {
         );
 
       default:
-        return _buildRoute(const DashboardScreen(), settings);
+        return _buildRoute(const MainScreen(), settings);
     }
   }
 
