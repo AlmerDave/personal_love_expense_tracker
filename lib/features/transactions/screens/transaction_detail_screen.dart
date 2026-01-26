@@ -38,7 +38,6 @@ class _TransactionDetailScreenState extends State<TransactionDetailScreen> {
   String? _selectedCategoryId;
   String? _selectedCategoryName;
   DateTime _selectedDate = DateTime.now();
-  bool _isLoading = false;
   bool _hasChanges = false;
 
   @override
@@ -120,30 +119,75 @@ class _TransactionDetailScreenState extends State<TransactionDetailScreen> {
 
     final amount = double.tryParse(_amountController.text) ?? _expense!.amount;
 
-    setState(() => _isLoading = true);
-
-    final updatedExpense = _expense!.copyWith(
-      amount: amount,
-      merchant: _merchantController.text.trim(),
-      category: _selectedCategoryId,
-      customCategoryName: _selectedCategoryId == 'custom' ? _selectedCategoryName : null,
-      date: _selectedDate,
-      notes: _notesController.text.trim().isEmpty ? null : _notesController.text.trim(),
+    // Show loading dialog that blocks all interaction
+    showDialog(
+      context: context,
+      barrierDismissible: false, // Prevents dismissing with back button/tap
+      builder: (BuildContext dialogContext) => WillPopScope(
+        onWillPop: () async => false, // Prevents back button on dialog
+        child: Dialog(
+          backgroundColor: AppColors.bgCard,
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const CircularProgressIndicator(
+                  valueColor: AlwaysStoppedAnimation<Color>(AppColors.primary),
+                ),
+                const SizedBox(width: 20),
+                Text(
+                  'Saving changes...',
+                  style: AppTypography.body.copyWith(
+                    color: AppColors.textPrimary,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
     );
 
-    final success = await context.read<ExpenseProvider>().updateExpense(updatedExpense);
-
-    setState(() => _isLoading = false);
-
-    if (success && mounted) {
-      context.read<DashboardProvider>().refresh();
-
-      await SuccessDialog.show(
-        context,
-        title: 'Changes Saved! ✓',
+    try {
+      final updatedExpense = _expense!.copyWith(
+        amount: amount,
+        merchant: _merchantController.text.trim(),
+        category: _selectedCategoryId,
+        customCategoryName: _selectedCategoryId == 'custom' ? _selectedCategoryName : null,
+        date: _selectedDate,
+        notes: _notesController.text.trim().isEmpty ? null : _notesController.text.trim(),
       );
 
-      Navigator.pop(context);
+      final success = await context.read<ExpenseProvider>().updateExpense(updatedExpense);
+
+      // Close loading dialog first - check if widget is still mounted
+      if (mounted) {
+        Navigator.pop(context); // Close loading dialog
+        
+        if (success) {
+          context.read<DashboardProvider>().refresh();
+
+          await SuccessDialog.show(
+            context,
+            title: 'Changes Saved! ✓',
+          );
+
+          // Check mounted again after async dialog
+          if (mounted) {
+            Navigator.pop(context); // Close detail screen
+          }
+        } else {
+          // Show error if save failed
+          _showErrorDialog();
+        }
+      }
+    } catch (e) {
+      // Close loading dialog and show error
+      if (mounted) {
+        Navigator.pop(context); // Close loading dialog
+        _showErrorDialog();
+      }
     }
   }
 
@@ -157,13 +201,84 @@ class _TransactionDetailScreenState extends State<TransactionDetailScreen> {
     );
 
     if (confirmed == true) {
-      final success = await context.read<ExpenseProvider>().deleteExpense(_expense!.id);
+      // Show loading dialog for delete operation
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext dialogContext) => WillPopScope(
+          onWillPop: () async => false,
+          child: Dialog(
+            backgroundColor: AppColors.bgCard,
+            child: Padding(
+              padding: const EdgeInsets.all(20),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const CircularProgressIndicator(
+                    valueColor: AlwaysStoppedAnimation<Color>(AppColors.primary),
+                  ),
+                  const SizedBox(width: 20),
+                  Text(
+                    'Deleting expense...',
+                    style: AppTypography.body.copyWith(
+                      color: AppColors.textPrimary,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      );
 
-      if (success && mounted) {
-        context.read<DashboardProvider>().refresh();
-        Navigator.pop(context);
+      try {
+        final success = await context.read<ExpenseProvider>().deleteExpense(_expense!.id);
+
+        if (mounted) {
+          Navigator.pop(context); // Close loading dialog
+          
+          if (success) {
+            context.read<DashboardProvider>().refresh();
+            Navigator.pop(context); // Close detail screen
+          } else {
+            _showErrorDialog();
+          }
+        }
+      } catch (e) {
+        if (mounted) {
+          Navigator.pop(context); // Close loading dialog
+          _showErrorDialog();
+        }
       }
     }
+  }
+
+  void _showErrorDialog() {
+    if (!mounted) return;
+    
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        backgroundColor: AppColors.bgCard,
+        title: Text(
+          'Error',
+          style: AppTypography.h3.copyWith(color: AppColors.accentCoral),
+        ),
+        content: Text(
+          'Something went wrong. Please try again.',
+          style: AppTypography.body,
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text(
+              'OK',
+              style: AppTypography.button.copyWith(color: AppColors.primary),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   @override
@@ -231,11 +346,11 @@ class _TransactionDetailScreenState extends State<TransactionDetailScreen> {
               ),
               const SizedBox(height: AppSpacing.xl),
 
-              // Save button
+              // Save button - no loading state needed since dialog handles it
               PrimaryButton(
                 label: '💾  Save Changes',
                 onPressed: _hasChanges ? _saveChanges : null,
-                isLoading: _isLoading,
+                isLoading: false, // Always false since we use dialog for loading
               ),
               const SizedBox(height: 12),
 

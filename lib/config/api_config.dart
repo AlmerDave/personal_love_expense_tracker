@@ -6,7 +6,7 @@ class ApiConfig {
   // Gemini API Configuration
   static String? _cachedApiKey;
   static const String geminiBaseUrl = 'https://generativelanguage.googleapis.com/v1beta';
-  static const String geminiModel = 'gemini-2.5-flash';
+  static const String geminiModel = 'gemini-2.5-flash-lite';
 
   // Get API key from storage
   static Future<String?> get geminiApiKey async {

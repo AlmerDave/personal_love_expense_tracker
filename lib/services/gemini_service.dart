@@ -70,27 +70,37 @@ class GeminiService {
             {
               'parts': [
                 {
-                  'text': '''Analyze this receipt image and extract the total amount due.
+                  'text': '''Extract the final amount the customer needs to pay from this receipt image.
 
-Instructions:
-- Look for these exact phrases: "TOTAL DUE", "TOTAL", "GRAND TOTAL", "AMOUNT DUE", "SUBTOTAL", or "BALANCE DUE"
-- The total amount is usually the final amount the customer needs to pay (before payment method)
-- Check both the middle and bottom sections of the receipt
-- Ignore payment details like "CASH", "CHANGE", "CREDIT CARD" - focus on the amount owed
-- Look for the number that appears after the total label (may be on same line or next line)
-- Include decimal values (e.g., if you see "165.71", return "165.71")
+WHAT TO LOOK FOR:
+- The amount that appears with labels like: "TOTAL DUE", "TOTAL", "AMOUNT DUE", "GRAND TOTAL", "BALANCE DUE", "SUBTOTAL"
+- In Filipino receipts, look for: "KABUUAN", "BAYAD", "TOTAL"
+- The final payable amount (usually the largest prominent number before payment details)
+- Numbers that appear in the bottom half of the receipt near payment information
 
-Format requirements:
-- Return ONLY the numeric value with decimal point if present
-- Do NOT include currency symbols (₱, etc.)
-- Do NOT include commas or other formatting
-- If no clear total is found, respond with "NOT_FOUND"
+SCANNING STRATEGY:
+1. First, look for any text containing "TOTAL" or "DUE" 
+2. Then look for the largest monetary amount in the lower portion
+3. Check for numbers near payment sections (before CASH, CHANGE, CREDIT details)
+4. Consider amounts that appear emphasized or in larger text
 
-Examples:
-- If receipt shows "TOTAL DUE 165.71" → return: 165.71
-- If receipt shows "AMOUNT DUE ₱1,234.50" → return: 1234.50
+WHAT TO IGNORE:
+- Individual item prices in the itemized list
+- Change amounts
+- Cash tendered amounts  
+- Tax components (unless it's the final total including tax)
+- Discount amounts
 
-Response: Just the number, nothing else.'''
+FORMAT RULES:
+- Return only the numeric value with decimal point
+- Remove currency symbols (₱, etc.)
+- Remove commas and spaces from numbers
+- If multiple candidates exist, choose the one closest to payment section
+- If genuinely unclear, return "UNCLEAR"
+
+Be flexible and use context clues. The goal is to find what a human would naturally identify as "the amount to pay".
+
+Return only the number (e.g., 165.71 or 184.00).'''
                 },
                 {
                   'inlineData': {

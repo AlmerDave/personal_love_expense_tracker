@@ -86,7 +86,7 @@ class QuickInsightCard extends StatelessWidget {
                               ? 'Tap to get AI-powered insights! ✨'
                               : provider.quickInsight,
                           style: AppTypography.body,
-                          maxLines: 3,
+                          maxLines: 5,
                           overflow: TextOverflow.ellipsis,
                         ),
 

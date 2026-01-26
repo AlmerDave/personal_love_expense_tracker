@@ -19,7 +19,8 @@ class RecentTransactionsList extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<ExpenseProvider>(
       builder: (context, provider, child) {
-        final recentExpenses = provider.getRecentExpenses(limit: 5);
+        final allExpenses = provider.expenses;
+        final recentExpenses = allExpenses.take(5).toList();
 
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,

@@ -28,12 +28,16 @@ class ExpenseProvider extends ChangeNotifier {
     try {
       _expenses = ExpenseRepository.instance.getAll();
       _applyFilters();
+      _isLoading = false;
+      // Only call notifyListeners once at the end, not in finally block
+      notifyListeners();
     } catch (e) {
       _error = e.toString();
-    } finally {
       _isLoading = false;
+      // Only call notifyListeners once at the end, not in finally block
       notifyListeners();
     }
+    // Remove the finally block completely
   }
 
   // Add expense
