@@ -154,7 +154,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         const SizedBox(width: AppSpacing.sm),
                         Expanded(
                           child: Text(
-                            'AI features disabled. Tap to add API key.',
+                            'AI features disabled. Please Tap to add API key.',
                             style: TextStyle(
                               fontSize: 13,
                               color: Colors.orange.shade700,
