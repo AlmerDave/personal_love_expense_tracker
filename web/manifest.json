@@ -1,0 +1,56 @@
+{
+  "name": "HerPeso - Your Friendly Peso Tracker",
+  "short_name": "HerPeso",
+  "description": "A Philippine-focused Personal AI Finance PWA that combines expense tracking with intelligent financial coaching.",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#FAFBFF",
+  "theme_color": "#6C63FF",
+  "orientation": "portrait-primary",
+  "prefer_related_applications": false,
+  "icons": [
+    {
+      "src": "icons/Icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icons/Icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "icons/Icon-maskable-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "icons/Icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "categories": ["finance", "productivity"],
+  "lang": "en-PH",
+  "dir": "ltr",
+  "scope": "/",
+  "screenshots": [],
+  "shortcuts": [
+    {
+      "name": "Add Expense",
+      "short_name": "Add",
+      "description": "Quickly add a new expense",
+      "url": "/manual-entry",
+      "icons": [{ "src": "icons/shortcut-add.png", "sizes": "96x96" }]
+    },
+    {
+      "name": "View History",
+      "short_name": "History",
+      "description": "View your transaction history",
+      "url": "/transactions",
+      "icons": [{ "src": "icons/shortcut-history.png", "sizes": "96x96" }]
+    }
+  ]
+}
