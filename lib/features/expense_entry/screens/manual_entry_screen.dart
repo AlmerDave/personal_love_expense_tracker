@@ -141,10 +141,9 @@ class _ManualEntryScreenState extends State<ManualEntryScreen> {
         title: 'Expense Saved! 🎉',
         subtitle:
             '${CurrencyFormatter.format(_amount)} at ${_merchantController.text}',
-        onDismiss: () => Navigator.of(context).pop(),
       );
 
-      Navigator.of(context).pop();
+      Navigator.of(context).popUntil((route) => route.isFirst);
     }
   }
 
