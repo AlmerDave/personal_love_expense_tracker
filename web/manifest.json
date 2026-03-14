@@ -71,14 +71,14 @@
       "name": "Add Expense",
       "short_name": "Add",
       "description": "Quickly add a new expense",
-      "url": "/manual-entry",
+      "url": "/personal_love_expense_tracker/manual-entry",
       "icons": [{ "src": "icons/icon-96x96.png", "sizes": "96x96" }]
     },
     {
       "name": "View History",
       "short_name": "History",
       "description": "View your transaction history",
-      "url": "/transactions",
+      "url": "/personal_love_expense_tracker/transactions",
       "icons": [{ "src": "icons/icon-96x96.png", "sizes": "96x96" }]
     }
   ]
