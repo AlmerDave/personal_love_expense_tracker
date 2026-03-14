@@ -2,7 +2,9 @@
   "name": "HerPeso - Your Friendly Peso Tracker",
   "short_name": "HerPeso",
   "description": "A Philippine-focused Personal AI Finance PWA that combines expense tracking with intelligent financial coaching.",
-  "start_url": ".",
+  "id": "/personal_love_expense_tracker/",
+  "start_url": "/personal_love_expense_tracker/",
+  "scope": "/personal_love_expense_tracker/",
   "display": "standalone",
   "background_color": "#FAFBFF",
   "theme_color": "#6C63FF",
@@ -63,7 +65,6 @@
   "categories": ["finance", "productivity"],
   "lang": "en-PH",
   "dir": "ltr",
-  "scope": "/",
   "screenshots": [],
   "shortcuts": [
     {
